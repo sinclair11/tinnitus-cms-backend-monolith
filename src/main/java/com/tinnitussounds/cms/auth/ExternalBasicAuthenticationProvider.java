@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class ExternalBasicAuthenticationProvider implements AuthenticationProvider {
     @Autowired
-    AuthRepository authRepository;
+    AdminRepository authRepository;
 
     @Override
     public Authentication authenticate(Authentication auth)

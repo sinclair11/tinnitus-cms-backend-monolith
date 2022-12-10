@@ -14,11 +14,12 @@ public class Album {
     private String name;
     private String category;
     private String description;
-    private int favorites;
     private String length;
-    private int likes;
-    private int reviews;
     private ArrayList<String> tags;
+    private int likes;
+    private int favorites;
+    private int reviews;
+    private ArrayList<Song> songs;
     private int totalSongs;
     private Date uploadDate;
 
@@ -110,4 +111,13 @@ public class Album {
     public void setUploadDate(Date uploadDate) {
         this.uploadDate = uploadDate;
     }
+
+    public ArrayList<Song> getSongs() {
+        return this.songs;
+    }
+
+    public void setSongs(ArrayList<Song> songs) {
+        this.songs = songs;
+    }
+
 }

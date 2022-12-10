@@ -2,6 +2,10 @@ package com.tinnitussounds.cms.services;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Date;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
@@ -15,8 +19,12 @@ import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
 import com.oracle.bmc.http.client.jersey3.Jersey3HttpProvider;
 import com.oracle.bmc.objectstorage.ObjectStorageClient;
 import com.oracle.bmc.objectstorage.model.Bucket;
+import com.oracle.bmc.objectstorage.model.CreatePreauthenticatedRequestDetails;
+import com.oracle.bmc.objectstorage.model.PreauthenticatedRequest;
+import com.oracle.bmc.objectstorage.requests.CreatePreauthenticatedRequestRequest;
 import com.oracle.bmc.objectstorage.requests.GetBucketRequest;
 import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
+import com.oracle.bmc.objectstorage.responses.CreatePreauthenticatedRequestResponse;
 import com.oracle.bmc.objectstorage.responses.GetBucketResponse;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
 import com.tinnitussounds.cms.config.Constants;
@@ -25,13 +33,12 @@ import com.tinnitussounds.cms.config.Constants;
 @PropertySource("classpath:application.properties")
 public class ObjectStorageService {
 
-    private static ObjectStorageService singleton;
     private ConfigFile config;
     @Nonnull
     private AuthenticationDetailsProvider provider;
     private ObjectStorageClient client;
 
-    private ObjectStorageService() {
+    public ObjectStorageService() {
         try {
             config = ConfigFileReader.parseDefault();
             provider = new ConfigFileAuthenticationDetailsProvider(config);
@@ -41,33 +48,26 @@ public class ObjectStorageService {
         }
     }
 
-    public static ObjectStorageService getInstance() {
-        if (singleton == null)
-            singleton = new ObjectStorageService();
-
-        return singleton;
-    }
-
     public Bucket getBucket(String name) {
         GetBucketRequest request = GetBucketRequest.builder()
-            .namespaceName(Constants.objectStorageNamespace)
-            .bucketName(name)
-            .build();
+                .namespaceName(Constants.objectStorageNamespace)
+                .bucketName(name)
+                .build();
 
         GetBucketResponse response = client.getBucket(request);
 
         return response.getBucket();
     }
 
-    public int uploadObject(String bucketName,String objectDbId, InputStream object, String path) throws IOException {
+    public int uploadObject(String bucketName, String objectDbId, InputStream object, String path) throws IOException {
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-		.namespaceName(Constants.objectStorageNamespace)
-		.bucketName(bucketName)
-		.objectName(objectDbId)
-		.contentLength(Long.valueOf(object.available()))
-		.putObjectBody(object)
-		.contentType("audio/wav")
-        .build();
+                .namespaceName(Constants.objectStorageNamespace)
+                .bucketName(bucketName)
+                .objectName(objectDbId)
+                .contentLength(Long.valueOf(object.available()))
+                .putObjectBody(object)
+                .contentType("audio/wav")
+                .build();
 
         PutObjectResponse response = client.putObject(putObjectRequest);
 
@@ -76,5 +76,33 @@ public class ObjectStorageService {
 
     public String uploadObjectMultipart(String objectDbId, Object file, String path) {
         return "";
+    }
+
+    public Optional<PreauthenticatedRequest> createPreauthRequest(String bucket, String userId) {
+
+        CreatePreauthenticatedRequestDetails createPreauthenticatedRequestDetails = CreatePreauthenticatedRequestDetails
+                .builder()
+                .name(userId)
+                .bucketListingAction(PreauthenticatedRequest.BucketListingAction.ListObjects)
+                .accessType(CreatePreauthenticatedRequestDetails.AccessType.AnyObjectRead)
+                .timeExpires(Date.from(Instant.now().plus(10 * 365, ChronoUnit.DAYS)))
+                .build();
+
+        CreatePreauthenticatedRequestRequest createPreauthenticatedRequestRequest = CreatePreauthenticatedRequestRequest
+                .builder()
+                .namespaceName(Constants.objectStorageNamespace)
+                .bucketName(bucket)
+                .createPreauthenticatedRequestDetails(createPreauthenticatedRequestDetails)
+                .build();
+
+        /* Send request to the Client */
+        CreatePreauthenticatedRequestResponse response = client
+                .createPreauthenticatedRequest(createPreauthenticatedRequestRequest);
+
+        if(response.get__httpStatusCode__() == 200) {
+            return Optional.of(response.getPreauthenticatedRequest());
+        } else {
+            return Optional.empty();
+        }
     }
 }

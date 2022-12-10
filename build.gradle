@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.0.0'
 	id 'io.spring.dependency-management' version '1.1.0'
+    id "org.kordamp.gradle.oci" version "0.9.0"
 }
 
 group = 'com.tinnitussounds'
@@ -16,6 +17,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+    gradlePluginPortal()
 }
 
 dependencies {
@@ -30,6 +32,11 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+    implementation "com.oracle.oci.sdk:oci-java-sdk-common-httpclient-choices:3.1.0"
+    implementation "com.oracle.oci.sdk:oci-java-sdk-objectstorage-generated:3.1.0"
+    implementation "com.oracle.oci.sdk:oci-java-sdk-common-httpclient-choices:3.1.0"
+    implementation "com.oracle.oci.sdk:oci-java-sdk-common-httpclient-jersey3:3.1.0"
+    implementation "org.apache.httpcomponents:httpcore:4.4.16"
 }
 
 tasks.named('test') {

@@ -22,9 +22,11 @@ import com.oracle.bmc.objectstorage.model.Bucket;
 import com.oracle.bmc.objectstorage.model.CreatePreauthenticatedRequestDetails;
 import com.oracle.bmc.objectstorage.model.PreauthenticatedRequest;
 import com.oracle.bmc.objectstorage.requests.CreatePreauthenticatedRequestRequest;
+import com.oracle.bmc.objectstorage.requests.DeleteObjectRequest;
 import com.oracle.bmc.objectstorage.requests.GetBucketRequest;
 import com.oracle.bmc.objectstorage.requests.PutObjectRequest;
 import com.oracle.bmc.objectstorage.responses.CreatePreauthenticatedRequestResponse;
+import com.oracle.bmc.objectstorage.responses.DeleteObjectResponse;
 import com.oracle.bmc.objectstorage.responses.GetBucketResponse;
 import com.oracle.bmc.objectstorage.responses.PutObjectResponse;
 import com.tinnitussounds.cms.config.Constants;
@@ -59,11 +61,11 @@ public class ObjectStorageService {
         return response.getBucket();
     }
 
-    public int uploadObject(String bucketName, String objectDbId, InputStream object, String path) throws IOException {
+    public int uploadObject(String bucketName, String objectName, InputStream object) throws IOException {
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .namespaceName(Constants.objectStorageNamespace)
                 .bucketName(bucketName)
-                .objectName(objectDbId)
+                .objectName(objectName)
                 .contentLength(Long.valueOf(object.available()))
                 .putObjectBody(object)
                 .contentType("audio/wav")
@@ -74,8 +76,20 @@ public class ObjectStorageService {
         return response.get__httpStatusCode__();
     }
 
-    public String uploadObjectMultipart(String objectDbId, Object file, String path) {
+    public String uploadObjectMultipart(String bucketName, String objectName, Object file) {
         return "";
+    }
+
+    public int deleteObject(String bucketName, String objectName) {
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+            .namespaceName(Constants.objectStorageNamespace)
+            .bucketName(bucketName)
+            .objectName(objectName)
+            .build();
+
+        DeleteObjectResponse deleteObjectResponse = client.deleteObject(deleteObjectRequest);
+
+        return deleteObjectResponse.get__httpStatusCode__();
     }
 
     public Optional<PreauthenticatedRequest> createPreauthRequest(String bucket, String userId) {

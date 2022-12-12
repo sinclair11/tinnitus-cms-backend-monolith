@@ -3,11 +3,11 @@ package com.tinnitussounds.cms.album;
 public class Song {
     private String name;
     private String category;
-    private int favorites;
-    private int length;
-    private int likes;
-    private int position;
-    private int views;
+    private Integer favorites;
+    private String length;
+    private Integer likes;
+    private Integer position;
+    private Integer views;
 
 
     public String getName() {
@@ -26,7 +26,7 @@ public class Song {
         this.category = category;
     }
 
-    public int getFavorites() {
+    public Integer getFavorites() {
         return this.favorites;
     }
 
@@ -34,15 +34,15 @@ public class Song {
         this.favorites = favorites;
     }
 
-    public int getLength() {
+    public String getLength() {
         return this.length;
     }
 
-    public void setLength(int length) {
+    public void setLength(String length) {
         this.length = length;
     }
 
-    public int getLikes() {
+    public Integer getLikes() {
         return this.likes;
     }
 
@@ -50,7 +50,7 @@ public class Song {
         this.likes = likes;
     }
 
-    public int getPosition() {
+    public Integer getPosition() {
         return this.position;
     }
 
@@ -58,7 +58,7 @@ public class Song {
         this.position = position;
     }
 
-    public int getViews() {
+    public Integer getViews() {
         return this.views;
     }
 

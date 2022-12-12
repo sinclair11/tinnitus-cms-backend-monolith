@@ -37,6 +37,7 @@ dependencies {
     implementation "com.oracle.oci.sdk:oci-java-sdk-common-httpclient-choices:3.1.0"
     implementation "com.oracle.oci.sdk:oci-java-sdk-common-httpclient-jersey3:3.1.0"
     implementation "org.apache.httpcomponents:httpcore:4.4.16"
+    implementation(files("lib/joda-time-2.12.2.jar"))
 }
 
 tasks.named('test') {

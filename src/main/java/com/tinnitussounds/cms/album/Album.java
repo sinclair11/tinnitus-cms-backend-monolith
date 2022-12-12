@@ -1,7 +1,6 @@
 package com.tinnitussounds.cms.album;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,13 +13,14 @@ public class Album {
     private String name;
     private String category;
     private String description;
-    private int favorites;
     private String length;
-    private int likes;
-    private int reviews;
     private ArrayList<String> tags;
+    private int likes;
+    private int favorites;
+    private int reviews;
+    private ArrayList<Song> songs;
     private int totalSongs;
-    private Date uploadDate;
+    private String uploadDate;
 
 
     public String getId() {
@@ -103,11 +103,20 @@ public class Album {
         this.totalSongs = totalSongs;
     }
 
-    public Date getUploadDate() {
+    public String getUploadDate() {
         return this.uploadDate;
     }
 
-    public void setUploadDate(Date uploadDate) {
+    public void setUploadDate(String uploadDate) {
         this.uploadDate = uploadDate;
     }
+
+    public ArrayList<Song> getSongs() {
+        return this.songs;
+    }
+
+    public void setSongs(ArrayList<Song> songs) {
+        this.songs = songs;
+    }
+
 }

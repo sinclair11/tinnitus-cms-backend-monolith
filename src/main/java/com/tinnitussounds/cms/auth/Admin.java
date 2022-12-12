@@ -4,18 +4,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("admins")
-public class Auth {
+public class Admin {
     @Id
     private String id;
 
     private String user;
     private String password;
-
-    public Auth(String id, String user, String password) {
-        this.id = id;
-        this.user = user;
-        this.password = password;
-    }
+    private String storagePreauth;
 
     public String getId() {
         return id;
@@ -40,4 +35,13 @@ public class Auth {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getStoragePreauth() {
+        return this.storagePreauth;
+    }
+
+    public void setStoragePreauth(String storagePreauth) {
+        this.storagePreauth = storagePreauth;
+    }
+
 }

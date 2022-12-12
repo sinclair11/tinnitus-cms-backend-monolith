@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class ExternalBasicAuthenticationProvider implements AuthenticationProvider {
     @Autowired
-    AuthRepository authRepository;
+    AdminRepository authRepository;
 
     @Override
     public Authentication authenticate(Authentication auth)
@@ -22,9 +22,9 @@ public class ExternalBasicAuthenticationProvider implements AuthenticationProvid
         String username = auth.getName();
         String password = auth.getCredentials().toString();
 
-        List<Auth> admins = authRepository.findAll();
+        List<Admin> admins = authRepository.findAll();
 
-        for(Auth admin : admins ) {
+        for(Admin admin : admins ) {
             if(admin.getUser().equals(username)) {
                 if(admin.getPassword().equals(password)) {
                     return new UsernamePasswordAuthenticationToken

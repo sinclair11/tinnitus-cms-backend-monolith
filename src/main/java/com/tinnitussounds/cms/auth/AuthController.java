@@ -38,9 +38,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<HashMap<String, String>> authenticateAdmin(Authentication auth) throws JSONException {
-        HashMap<String, String> map = new HashMap<String, String>();
-        String token = tokenService.generateToken(auth);
+    public ResponseEntity<HashMap<String, Object>> authenticateAdmin(Authentication auth) throws JSONException {
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        Token token = tokenService.generateToken(auth);
         String preauthReq = "";
         List<Admin> admins = adminAuthRepository.findAll();
         for(Admin admin : admins) {

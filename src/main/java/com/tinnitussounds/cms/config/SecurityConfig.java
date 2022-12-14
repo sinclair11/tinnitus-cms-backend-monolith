@@ -80,6 +80,7 @@ public class SecurityConfig {
     SecurityFilterChain formLoginFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .securityMatcher("/login")
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

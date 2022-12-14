@@ -1,7 +1,6 @@
 package com.tinnitussounds.cms;
 
 import com.tinnitussounds.cms.config.RsaKeyProperties;
-import com.tinnitussounds.cms.services.ObjectStorageService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

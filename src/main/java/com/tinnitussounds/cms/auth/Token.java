@@ -1,5 +1,5 @@
 package com.tinnitussounds.cms.auth;
 
-public record Token(String token, long expiration) {
+public record Token(String value, long expiration) {
     
 }

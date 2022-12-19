@@ -20,17 +20,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import com.tinnitussounds.cms.services.ObjectStorageService;
+
+import com.tinnitussounds.cms.config.Constants;
+import com.tinnitussounds.cms.services.StorageService;
 
 @RestController
 public class CategoryController {
     @Autowired
-    CategoryRepository categoriesRepository;
+    private CategoryRepository categoriesRepository;
+    private StorageService storageService;
 
-    private ObjectStorageService objectStorageService;
-
-    public CategoryController(ObjectStorageService objectStorageService) {
-        this.objectStorageService = objectStorageService;
+    public CategoryController(CategoryRepository categoriesRepository, StorageService storageService) {
+        this.categoriesRepository = categoriesRepository;
+        this.storageService = storageService;
     }
 
     @GetMapping("/api/admin/categories{which}")
@@ -69,7 +71,7 @@ public class CategoryController {
             }
         }
 
-        if(which.equals("all")) 
+        if (which.equals("all"))
             return ResponseEntity.ok().body(categoryPack);
         else
             return ResponseEntity.ok().body(categoryList);
@@ -93,27 +95,17 @@ public class CategoryController {
             @RequestParam("color") String color,
             @RequestParam("type") String type,
             @RequestParam MultipartFile file) {
+        
         Category category = new Category("", name, description, color, type);
         category = categoriesRepository.insert(category);
-        InputStream inputStream = null;
         try {
-            inputStream = new BufferedInputStream(file.getInputStream());
+            String id = category.getId();
+            storageService.putFile(Constants.categoriesPath + "/" + id, id + ".jpg", file);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Could not read artwork file", e);
+            ResponseEntity.internalServerError().body("Could not create category item");
         }
-        try
-
-        {
-            int httpCode = objectStorageService.uploadObject("resources", "categories/" + category.getId() + ".jpg",
-                    inputStream);
-            return ResponseEntity.status(httpCode).body("Category added successfully");
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Could not parse file length", e);
-        }
+        return ResponseEntity.status(201).body("Category added successfully");
     }
 
     @PutMapping("/api/admin/categories")
@@ -131,16 +123,18 @@ public class CategoryController {
     @DeleteMapping("/api/admin/categories/category{id}")
     public ResponseEntity<String> deleteCategory(@RequestParam("id") String id) {
         Optional<Category> category = categoriesRepository.findById(id);
-
         if (category.isPresent()) {
-            if (objectStorageService.deleteObject("resources", "categories/" + id + ".jpg") == 204) {
-                categoriesRepository.deleteById(id);
-                return ResponseEntity.ok().body("Category deleted successfully");
-            } else {
-                return ResponseEntity.internalServerError().body("Could not delete asset in storage");
+            categoriesRepository.delete(category.get());
+            try {
+                storageService.deleteFolder(Constants.categoriesPath + "/" + id);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return ResponseEntity.internalServerError().body("Could not delete category");
             }
         } else {
             return ResponseEntity.notFound().build();
         }
+
+        return ResponseEntity.ok().body("Category deleted successfuly");
     }
 }

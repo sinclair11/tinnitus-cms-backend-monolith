@@ -14,7 +14,7 @@ public class Album {
     private String category;
     private String description;
     private String length;
-    private ArrayList<String> tags;
+    private String[] tags;
     private int likes;
     private int favorites;
     private int reviews;
@@ -87,11 +87,11 @@ public class Album {
         this.reviews = reviews;
     }
 
-    public ArrayList<String> getTags() {
+    public String[] getTags() {
         return this.tags;
     }
 
-    public void setTags(ArrayList<String> tags) {
+    public void setTags(String[] tags) {
         this.tags = tags;
     }
 

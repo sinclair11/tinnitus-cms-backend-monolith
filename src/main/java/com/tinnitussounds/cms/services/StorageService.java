@@ -28,12 +28,17 @@ public class StorageService {
         }
     }
 
-    public FileSystemResource readAudioFile(String dir, String name) {
-        File audioFile = new File(dir + "/" + name);
+    public FileSystemResource readResourceFile(String dir, String name) {
+        File file = new File(dir + "/" + name);
         // Create a FileSystemResource object for the audio file
-        FileSystemResource audioResource = new FileSystemResource(audioFile);
+        FileSystemResource resource = new FileSystemResource(file);
 
-        return audioResource;
+        return resource;
+    }
+
+    public void deleteFile(String dir, String name) {
+        File fileToDelete = new File(dir + "/" + name);
+        fileToDelete.delete();
     }
 
     public void deleteFolder(String dir) throws IOException {

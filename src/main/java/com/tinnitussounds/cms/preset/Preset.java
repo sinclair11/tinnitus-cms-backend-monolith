@@ -15,6 +15,7 @@ public class Preset {
     private String length;
     private int likes;
     private int favorites;
+    private int views;
     private int reviews;
     private String uploadDate;
 
@@ -77,5 +78,11 @@ public class Preset {
     }
     public void setUploadDate(String uploadDate) {
         this.uploadDate = uploadDate;
+    }
+    public int getViews() {
+        return views;
+    }
+    public void setViews(int views) {
+        this.views = views;
     }
 }

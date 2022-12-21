@@ -81,7 +81,7 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChainStorage(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .securityMatcher("/api/admin/album/assets/**")
+                .securityMatcher("/api/admin/album/assets/**", "/api/admin/sample/assets/**", "/api/admin/preset/assets/**")
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors().configurationSource(corsConfigurationSource())
                 .and()

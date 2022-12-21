@@ -10,7 +10,6 @@ public class Admin {
 
     private String user;
     private String password;
-    private String storagePreauth;
 
     public String getId() {
         return id;
@@ -35,13 +34,4 @@ public class Admin {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getStoragePreauth() {
-        return this.storagePreauth;
-    }
-
-    public void setStoragePreauth(String storagePreauth) {
-        this.storagePreauth = storagePreauth;
-    }
-
 }

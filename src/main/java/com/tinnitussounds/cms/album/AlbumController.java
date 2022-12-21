@@ -132,13 +132,13 @@ public class AlbumController {
             albumRepository.delete(album.get());
             try {
                 storageService.deleteFolder(Constants.albumsPath + "/" + id);
-                return ResponseEntity.ok().body("Asset deleted successfully");
+                return ResponseEntity.ok().body("Resource deleted successfully");
             } catch (IOException e) {
                 e.printStackTrace();
                 return ResponseEntity.internalServerError().body("Could not delete requested resource");
             }
         } else {
-            return ResponseEntity.ok().body("");
+            return ResponseEntity.notFound().build();
         }
     }
     

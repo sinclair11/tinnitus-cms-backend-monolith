@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AuthController {
+
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -31,21 +31,12 @@ public class AuthController {
         this.tokenService = tokenService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<HashMap<String, Object>> authenticateAdmin(Authentication auth) throws JSONException {
+    @PostMapping("/api/login")
+    public ResponseEntity<?> authenticateAdmin(Authentication auth) {
         HashMap<String, Object> map = new HashMap<String, Object>();
         jwtToken = tokenService.generateToken(auth);
         Token token = new Token(jwtToken.getTokenValue(), Constants.tokenDuration);
-        String preauthReq = "";
-        List<Admin> admins = adminAuthRepository.findAll();
-        for(Admin admin : admins) {
-            if(auth.getName().equals(admin.getUser())) {
-                preauthReq = admin.getStoragePreauth(); 
-                break;
-            }
-        }
         map.put("token", token);
-        map.put("preauthreq", preauthReq);
         return ResponseEntity.status(200).body(map);
     }
 

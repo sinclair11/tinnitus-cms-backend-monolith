@@ -1,7 +1,7 @@
 HELP.md
 .gradle
 build/
-albums/
+assets/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/

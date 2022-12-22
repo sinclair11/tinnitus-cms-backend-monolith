@@ -8,4 +8,7 @@ import org.springframework.data.mongodb.repository.Query;
 public interface SampleRepository extends MongoRepository<Sample, String> {
     @Query("{ 'name' : ?0 }")
     List<Sample> findByName(String name);
+
+    @Query("{ 'name': {$regex: ?0, '$options' : 'i'} }")
+    List<Sample> findBySearch(String pattern);
 }

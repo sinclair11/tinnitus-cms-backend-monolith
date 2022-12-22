@@ -41,6 +41,13 @@ public class AlbumController {
         return ResponseEntity.status(200).body(albumRepository.findAll());
     }
 
+    @GetMapping("/api/admin/albums/search/{pattern}")
+    public ResponseEntity<List<Album>> getAlbumsBySearch(@PathVariable("pattern") String pattern) {
+        List<Album> albums = albumRepository.findBySearch(pattern);
+
+        return ResponseEntity.ok().body(albums);
+    }
+
     @GetMapping("/api/admin/album/{id}")
     public ResponseEntity<Album> getAlbumById(@PathVariable("id") String id) {
         Optional<Album> album = albumRepository.findById(id);

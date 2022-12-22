@@ -49,6 +49,14 @@ public class PresetController {
         }
     }
 
+    @GetMapping("/api/admin/preset/check/{name}")
+    public ResponseEntity<Boolean> checkIfExists(@PathVariable("name") String name) {
+        List<Preset> presets = presetRepository.findByName(name);
+        Boolean response = presets.size() > 0 ? true : false;
+
+        return ResponseEntity.ok().body(response);
+    }
+
     @PostMapping("/api/admin/preset")
     public ResponseEntity<String> registerPreset(@RequestBody Preset preset) {
         preset.setUploadDate(DateTime.now().toDateTime(DateTimeZone.UTC).toString());

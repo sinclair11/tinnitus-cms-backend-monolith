@@ -9,6 +9,8 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
+import com.tinnitussounds.cms.config.Constants;
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
@@ -32,7 +34,7 @@ public class TokenService {
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(now)
-                .expiresAt(now.plus(1, ChronoUnit.HOURS))
+                .expiresAt(now.plus(Constants.tokenDuration, ChronoUnit.MILLIS))
                 .subject(authentication.getName())
                 .claim("scope", scope)
                 .build();
@@ -45,11 +47,10 @@ public class TokenService {
         Instant now = Instant.now();
         Jwt jwt = jwtDecoder.decode(token);
         Map<String, Object> claims = jwt.getClaims();
-        claims.put("exp",Instant.now().plus(2, ChronoUnit.HOURS));
         JwtClaimsSet claimsSet = JwtClaimsSet.builder()
         .issuer(claims.get("iss").toString())
         .issuedAt(now)
-        .expiresAt(now.plus(2, ChronoUnit.HOURS))
+        .expiresAt(now.plus(Constants.tokenDuration, ChronoUnit.MILLIS))
         .subject(claims.get("sub").toString())
         .claim("scope", claims.get("scope"))
         .build();

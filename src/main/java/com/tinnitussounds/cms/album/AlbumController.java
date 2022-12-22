@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tinnitussounds.cms.config.Constants;
 import com.tinnitussounds.cms.services.StorageService;
+
+import io.vavr.control.Option;
 
 @Controller
 public class AlbumController {
@@ -39,13 +42,21 @@ public class AlbumController {
     }
 
     @GetMapping("/api/admin/album/{id}")
-    public ResponseEntity<Album> getAlbum(@PathVariable("id") String id) {
+    public ResponseEntity<Album> getAlbumById(@PathVariable("id") String id) {
         Optional<Album> album = albumRepository.findById(id);
         if (album.isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.ok().body(album.get());
         }
+    }
+
+    @GetMapping("/api/admin/album/check/{name}")
+    public ResponseEntity<Boolean> checkIfExists(@PathVariable("name") String name) {
+        List<Album> albums = albumRepository.findByName(name);
+        Boolean response = albums.size() > 0 ? true : false;
+
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/api/admin/album")

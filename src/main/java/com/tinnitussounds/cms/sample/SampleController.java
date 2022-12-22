@@ -49,6 +49,13 @@ public class SampleController {
         }
     }
 
+    @GetMapping("/api/admin/samples/search/{pattern}")
+    public ResponseEntity<List<Sample>> getSamplesBySearch(@PathVariable("pattern") String pattern) {
+        List<Sample> samples = sampleRepository.findBySearch(pattern);
+
+        return ResponseEntity.ok().body(samples);
+    }
+
     @GetMapping("/api/admin/sample/check/{name}")
     public ResponseEntity<Boolean> checkIfExists(@PathVariable("name") String name) {
         List<Sample> samples = sampleRepository.findByName(name);

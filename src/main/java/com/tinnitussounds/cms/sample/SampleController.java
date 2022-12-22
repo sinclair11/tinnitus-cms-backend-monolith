@@ -49,6 +49,14 @@ public class SampleController {
         }
     }
 
+    @GetMapping("/api/admin/sample/check/{name}")
+    public ResponseEntity<Boolean> checkIfExists(@PathVariable("name") String name) {
+        List<Sample> samples = sampleRepository.findByName(name);
+        Boolean response = samples.size() > 0 ? true : false;
+
+        return ResponseEntity.ok().body(response);
+    }
+
     @PostMapping("/api/admin/sample")
     public ResponseEntity<String> registerSample(@RequestBody Sample sample) {
         sample.setUploadDate(DateTime.now().toDateTime(DateTimeZone.UTC).toString());

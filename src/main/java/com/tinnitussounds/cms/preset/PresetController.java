@@ -57,6 +57,13 @@ public class PresetController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/api/admin/presets/search/{pattern}")
+    public ResponseEntity<List<Preset>> getPresetsBySearch(@PathVariable("pattern") String pattern) {
+        List<Preset> presets = presetRepository.findBySearch(pattern);
+
+        return ResponseEntity.ok().body(presets);
+    }
+
     @PostMapping("/api/admin/preset")
     public ResponseEntity<String> registerPreset(@RequestBody Preset preset) {
         preset.setUploadDate(DateTime.now().toDateTime(DateTimeZone.UTC).toString());

@@ -1,6 +1,7 @@
 package com.tinnitussounds.cms.album;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +9,6 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,15 +21,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tinnitussounds.cms.activity.AlbumActivity;
+import com.tinnitussounds.cms.activity.AlbumActivityRepository;
+import com.tinnitussounds.cms.activity.SongActivity;
+import com.tinnitussounds.cms.activity.SongActivityRepository;
 import com.tinnitussounds.cms.config.Constants;
 import com.tinnitussounds.cms.services.StorageService;
-
-import io.vavr.control.Option;
 
 @Controller
 public class AlbumController {
     @Autowired
     AlbumRepository albumRepository;
+    @Autowired
+    AlbumActivityRepository albumActivityRepository;
+    @Autowired
+    SongActivityRepository songActivityRepository;
     private StorageService storageService;
 
     public AlbumController(StorageService storageService) {
@@ -70,6 +76,20 @@ public class AlbumController {
     public ResponseEntity<String> registerAlbum(@RequestBody Album album) {
         album.setUploadDate(DateTime.now().toDateTime(DateTimeZone.UTC).toString());
         Album dbAlbum = albumRepository.insert(album);
+        AlbumActivity albumActivity = new AlbumActivity();
+        albumActivity.setId(dbAlbum.getId());
+        albumActivity.setName(dbAlbum.getName());
+        ArrayList<SongActivity> songsActivity = new ArrayList<>();
+
+        for(Song song : dbAlbum.getSongs()) {
+            SongActivity songActivity = new SongActivity();
+            songActivity.setId(song.getId().toString());
+            songActivity.setName(song.getName());
+            songsActivity.add(songActivity);
+        }
+        //Album activity will also contain activity for songs
+        albumActivity.setSongsActivity(songsActivity);
+        albumActivityRepository.insert(albumActivity);
 
         return ResponseEntity.ok().body(dbAlbum.getId());
     }
@@ -158,6 +178,5 @@ public class AlbumController {
         } else {
             return ResponseEntity.notFound().build();
         }
-    }
-    
+    }   
 }

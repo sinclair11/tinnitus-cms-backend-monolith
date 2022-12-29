@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tinnitussounds.cms.activity.SampleActivity;
+import com.tinnitussounds.cms.activity.SampleActivityRepository;
 import com.tinnitussounds.cms.config.Constants;
 import com.tinnitussounds.cms.services.StorageService;
 
@@ -27,6 +29,8 @@ import com.tinnitussounds.cms.services.StorageService;
 public class SampleController {
     @Autowired
     private SampleRepository sampleRepository;
+    @Autowired
+    private SampleActivityRepository sampleActivityRepository;
     private StorageService storageService;
 
     public SampleController(SampleRepository sampleRepository, StorageService storageService) {
@@ -68,6 +72,10 @@ public class SampleController {
     public ResponseEntity<String> registerSample(@RequestBody Sample sample) {
         sample.setUploadDate(DateTime.now().toDateTime(DateTimeZone.UTC).toString());
         Sample dbSample = sampleRepository.insert(sample);
+        SampleActivity sampleActivity = new SampleActivity();
+        sampleActivity.setId(dbSample.getId());
+        sampleActivity.setName(dbSample.getName());
+        sampleActivityRepository.insert(sampleActivity);
 
         return ResponseEntity.ok().body(dbSample.getId());
     }

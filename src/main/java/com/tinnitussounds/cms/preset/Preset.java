@@ -13,10 +13,6 @@ public class Preset {
     private String description;
     private String[] tags;
     private String length;
-    private int likes;
-    private int favorites;
-    private int views;
-    private int reviews;
     private String uploadDate;
 
     public String getId() {
@@ -55,34 +51,10 @@ public class Preset {
     public void setLength(String length) {
         this.length = length;
     }
-    public int getLikes() {
-        return likes;
-    }
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
-    public int getFavorites() {
-        return favorites;
-    }
-    public void setFavorites(int favorites) {
-        this.favorites = favorites;
-    }
-    public int getReviews() {
-        return reviews;
-    }
-    public void setReviews(int reviews) {
-        this.reviews = reviews;
-    }
     public String getUploadDate() {
         return uploadDate;
     }
     public void setUploadDate(String uploadDate) {
         this.uploadDate = uploadDate;
-    }
-    public int getViews() {
-        return views;
-    }
-    public void setViews(int views) {
-        this.views = views;
     }
 }

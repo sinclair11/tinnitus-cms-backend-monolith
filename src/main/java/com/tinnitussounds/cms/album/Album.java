@@ -15,9 +15,6 @@ public class Album {
     private String description;
     private String length;
     private String[] tags;
-    private int likes;
-    private int favorites;
-    private int reviews;
     private ArrayList<Song> songs;
     private int totalSongs;
     private String uploadDate;
@@ -47,14 +44,6 @@ public class Album {
         this.description = description;
     }
 
-    public int getFavorites() {
-        return this.favorites;
-    }
-
-    public void setFavorites(int favorites) {
-        this.favorites = favorites;
-    }
-
     public String getLength() {
         return this.length;
     }
@@ -63,28 +52,12 @@ public class Album {
         this.length = length;
     }
 
-    public int getLikes() {
-        return this.likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
-
     public String getName() {
         return this.name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getReviews() {
-        return this.reviews;
-    }
-
-    public void setReviews(int reviews) {
-        this.reviews = reviews;
     }
 
     public String[] getTags() {

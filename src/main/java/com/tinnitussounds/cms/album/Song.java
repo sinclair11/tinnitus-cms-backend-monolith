@@ -1,15 +1,18 @@
 package com.tinnitussounds.cms.album;
 
+import org.bson.types.ObjectId;
+
 public class Song {
+    private ObjectId id;
     private String name;
     private String category;
-    private Integer favorites;
     private String length;
-    private Integer likes;
     private Integer position;
-    private Integer views;
 
-
+    public Song() {
+        id = new ObjectId();
+    }
+ 
     public String getName() {
         return this.name;
     }
@@ -26,28 +29,8 @@ public class Song {
         this.category = category;
     }
 
-    public Integer getFavorites() {
-        return this.favorites;
-    }
-
-    public void setFavorites(int favorites) {
-        this.favorites = favorites;
-    }
-
-    public String getLength() {
-        return this.length;
-    }
-
     public void setLength(String length) {
         this.length = length;
-    }
-
-    public Integer getLikes() {
-        return this.likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
     }
 
     public Integer getPosition() {
@@ -58,12 +41,20 @@ public class Song {
         this.position = position;
     }
 
-    public Integer getViews() {
-        return this.views;
+    public void setPosition(Integer position) {
+        this.position = position;
     }
 
-    public void setViews(int views) {
-        this.views = views;
+    public String getLength() {
+        return length;
+    }
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
 }

@@ -1,11 +1,9 @@
 package com.tinnitussounds.cms.sample;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("samples")
 public class Sample {
-    @Id
     private String id;
 
     private String name;
@@ -13,10 +11,6 @@ public class Sample {
     private String description;
     private String[] tags;
     private String length;
-    private int likes;
-    private int favorites;
-    private int views;
-    private int reviews;
     private String uploadDate;
 
     public String getId() {
@@ -54,30 +48,6 @@ public class Sample {
     }
     public void setLength(String duration) {
         this.length = duration;
-    }
-    public int getLikes() {
-        return likes;
-    }
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
-    public int getFavorites() {
-        return favorites;
-    }
-    public void setFavorites(int favorites) {
-        this.favorites = favorites;
-    }
-    public int getViews() {
-        return views;
-    }
-    public void setViews(int views) {
-        this.views = views;
-    }
-    public int getReviews() {
-        return reviews;
-    }
-    public void setReviews(int reviews) {
-        this.reviews = reviews;
     }
     public String getUploadDate() {
         return uploadDate;

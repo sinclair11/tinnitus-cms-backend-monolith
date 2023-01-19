@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tinnitussounds.cms.activity.PresetActivity;
+import com.tinnitussounds.cms.activity.PresetActivityRepository;
 import com.tinnitussounds.cms.config.Constants;
 import com.tinnitussounds.cms.services.StorageService;
 
@@ -27,6 +29,8 @@ import com.tinnitussounds.cms.services.StorageService;
 public class PresetController {
     @Autowired
     private PresetRepository presetRepository;
+    @Autowired
+    private PresetActivityRepository presetActivityRepository;
     private StorageService storageService;
 
     public PresetController(PresetRepository presetRepository, StorageService storageService) {
@@ -68,6 +72,10 @@ public class PresetController {
     public ResponseEntity<String> registerPreset(@RequestBody Preset preset) {
         preset.setUploadDate(DateTime.now().toDateTime(DateTimeZone.UTC).toString());
         Preset dbPreset = presetRepository.insert(preset);
+        PresetActivity presetActivity = new PresetActivity();
+        presetActivity.setId(dbPreset.getId());
+        presetActivity.setName(dbPreset.getName());
+        presetActivityRepository.insert(presetActivity);
 
         return ResponseEntity.ok().body(dbPreset.getId());
     }

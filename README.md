@@ -1,3 +1,5 @@
+<img src="https://www.stefantincu.com/misc/tinnitus-banner.png" alt="preview">
+
 ## Tinnitus CMS admin server
 
 Spring Boot application for Tinnitus CMS granting the admin access to upload, view, edit and delete albums, presets and samples. Also the application
